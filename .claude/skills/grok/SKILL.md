@@ -47,5 +47,6 @@ env -u XAI_API_KEY -u GROK_CODE_XAI_API_KEY grok --no-auto-update -p "<依頼文
 
 - `curl -fsSL https://x.ai/cli/install.sh | bash` でインストールし、`grok login` でログインする
   （ブラウザがない環境では `grok login --device-auth`）。X のプランに Grok Build が含まれていれば追加料金なし
+- Linux では `--sandbox read-only` に bubblewrap が必要（`apt-get install -y bubblewrap`）
 - API キー（console.x.ai）は従量課金なので作らない・使わない
 - Claude Code のクラウド環境で使う場合: 環境のネットワーク設定で `x.ai` と `api.x.ai` への通信を許可する
