@@ -16,6 +16,10 @@ gcloud services enable colaboratory.googleapis.com
 ```
 ※ 課金アカウントの紐付けは基本不要のはず。エラーで求められたら教えてください。
 
+### ハマりどころ（実測）
+- Google Cloud初利用のアカウントは、先に https://console.cloud.google.com/ で利用規約に同意しないとプロジェクト作成が `Callers must accept Terms of Service` で失敗する
+- 新規プロジェクトでは `serviceusage.googleapis.com` も有効化が必要。有効化するまでは `x-goog-user-project` ヘッダーを付けると403になる
+
 ## 2. 認証（ADC）
 ```bash
 gcloud auth application-default login \
@@ -53,3 +57,8 @@ claude mcp add --transport http colab https://colaboratory.googleapis.com/mcp \
 ```
 トークンは約1時間で切れるので、お試し用。切れたら `claude mcp remove colab` → 再登録。
 繋いだら Claude Code に「Colabの get_subscription と list_runtime_specs を叩いて」と頼めば同じ確認ができる。
+
+## 実測結果（2026-11-25, Google AI Plus契約アカウント）
+- gcloud標準クライアントでColabスコープはブロックされなかった
+- `get_subscription` → `SUBSCRIPTION_TIER_PRO`（PlusでもColab上はPro扱い）
+- `list_runtime_specs` で eligible: T4 / L4 / A100 / G4 / TPU v5e-1・v6e-1 / CPU。H100 は対象外
