@@ -8,6 +8,27 @@ description: Codex CLI（OpenAI）にコードや文章のレビュー・相談�
 Codex CLI を非対話モード（`codex exec`）で実行し、出力をそのまま端末に流す。
 MCP 経由と違い、進捗が見えるので待ち時間や中断判断がしやすい。
 
+## 最初にログイン状態を確認する
+
+クラウドセッションのコンテナは毎回作り直されるので、Codex のログインは引き継がれない。
+環境に保存された OpenAI API キーは期限切れのことがある（`401 expired_secret_key` になる）。
+`codex exec` の前に必ず確認する:
+
+```bash
+codex login status
+```
+
+`Not logged in` なら、ChatGPT アカウントでデバイスコードログインする
+（バックグラウンドで起動し、出力された URL とコードをユーザーに伝える）:
+
+```bash
+(timeout 900 codex login --device-auth > <scratchpad>/codex_login.log 2>&1 &); sleep 8; cat <scratchpad>/codex_login.log
+```
+
+- ユーザーに https://auth.openai.com/codex/device を開いてコードを入力してもらう（15分で失効）
+- 「できた」と言われたら `codex login status` が `Logged in using ChatGPT` になっていることを確認してから実行する
+- 認証情報（`~/.codex/auth.json`）はリポジトリにコミットしない
+
 ## 実行コマンド
 
 ```bash
